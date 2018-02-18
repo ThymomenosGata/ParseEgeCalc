@@ -25,22 +25,14 @@ public class ParseJsoap {
                     .getElementsByTag("td").get(2).getAllElements();
             Elements strD = doc.getElementsByClass("s").get(i)
                     .getElementsByClass("small_text gray_text");
-            Pattern pattern = Pattern.compile(strD.text());
-            Matcher matcher = pattern.matcher(strS.text());
-            String ss = matcher.replaceAll("");
-
             Elements strC = doc.getElementsByClass("s").get(i)
                     .getElementsByTag("td").get(4).getAllElements();
-            pattern = Pattern.compile(" ");
-            matcher = pattern.matcher(strC.text());
-            String prB = matcher.replaceAll("");
-
             Elements strY = doc.getElementsByClass("s").get(i)
                             .getElementsByClass("blue_text").get(0).getAllElements();
-            pattern = Pattern.compile(" ");
-            matcher = pattern.matcher(strY.text());
-            String prY = matcher.replaceAll("");
 
+            String ss = geter(strS.text(), strD.text());
+            int prB = Integer.parseInt(geter(strC.text(), " "));
+            int prY = Integer.parseInt(geter(strY.text(), " "));
             Discipline disc = new Discipline();
             disc = getDisc(strD.text());
 
@@ -50,13 +42,13 @@ public class ParseJsoap {
                     .getElementsByClass("light_gray_back gray_border_right").text(),
                             ss,
                             disc,
-                            Integer.parseInt(prB),
-                            Integer.parseInt(prY)
+                            prB,
+                            prY
                             ));
             i++;
         }
 
-        System.out.print(univers.get(0).getSpeciality());
+        System.out.print(univers.get(33).getSpeciality());
     }
 
     public static Discipline getDisc(String input) {
@@ -90,5 +82,12 @@ public class ParseJsoap {
             }
         }
         return disc;
+    }
+
+    public static String geter(String input, String inputCut){
+        Pattern pattern = Pattern.compile(inputCut);
+        Matcher matcher = pattern.matcher(input);
+        String prB = matcher.replaceAll("");
+        return prB;
     }
 }
