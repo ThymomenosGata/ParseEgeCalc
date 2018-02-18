@@ -1,11 +1,9 @@
 import HelpersClass.ClassForUniversities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class ParseJsoap {
@@ -21,18 +19,22 @@ public class ParseJsoap {
                 .getElementsByClass("light_gray_back gray_border_right");
 
         Elements strS = doc.getElementsByClass("s").get(0)
-                .getElementsByClass("gray_border_right").get(1)
-                .getElementsByTag("td");
+                .getElementsByTag("td").get(2).getAllElements();
 
         Elements strD = doc.getElementsByClass("s").get(0)
                 .getElementsByClass("small_text gray_text");
 
-        Elements strB = doc.getElementsByClass("blue_text");
-        Elements strY = doc.getElementsByClass("white-space:nowrap;");
+
+        Elements strB = doc.getElementsByClass("s").get(0)
+                .getElementsByTag("td").get(4).getAllElements();
+
+        Elements strY = doc.getElementsByClass("s").get(0)
+                .getElementsByClass("blue_text").get(0).getAllElements();
         ArrayList<ClassForUniversities> univers = new ArrayList<ClassForUniversities>();
-        //for(Element el : strU){
+        // for(Element el : strU){
         //    univers.add(new ClassForUniversities())
         //}
-        System.out.println(strS.get(0).text());
+
+        System.out.println(strD.text());
     }
 }
