@@ -1,10 +1,14 @@
 import HelpersClass.ClassForUniversities;
+import HelpersClass.Discipline;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParseJsoap {
     static final String URL = "http://postyplenie.ru/calculator.php?Vuz=all&obzestvoznanie=100" +
@@ -12,29 +16,79 @@ public class ParseJsoap {
             "&literatura=100&history=100&matematika=100&lang=100&Submit.x=0&Submit.y=0";
     public static void Parse() throws IOException {
         Document doc = Jsoup.connect(URL).get();
-        Elements strU = doc.getElementsByClass("s").get(0)
-                .getElementsByClass("light_gray_blue");
+        Elements strU = doc.getElementsByClass("s");
 
-        Elements strC = doc.getElementsByClass("s").get(0)
-                .getElementsByClass("light_gray_back gray_border_right");
-
-        Elements strS = doc.getElementsByClass("s").get(0)
-                .getElementsByTag("td").get(2).getAllElements();
-
-        Elements strD = doc.getElementsByClass("s").get(0)
-                .getElementsByClass("small_text gray_text");
-
-
-        Elements strB = doc.getElementsByClass("s").get(0)
-                .getElementsByTag("td").get(4).getAllElements();
-
-        Elements strY = doc.getElementsByClass("s").get(0)
-                .getElementsByClass("blue_text").get(0).getAllElements();
         ArrayList<ClassForUniversities> univers = new ArrayList<ClassForUniversities>();
-        // for(Element el : strU){
-        //    univers.add(new ClassForUniversities())
-        //}
+        int i = 0;
+        for(Element el : strU){
+            Elements strS = doc.getElementsByClass("s").get(i)
+                    .getElementsByTag("td").get(2).getAllElements();
+            Elements strD = doc.getElementsByClass("s").get(i)
+                    .getElementsByClass("small_text gray_text");
+            Pattern pattern = Pattern.compile(strD.text());
+            Matcher matcher = pattern.matcher(strS.text());
+            String ss = matcher.replaceAll("");
 
-        System.out.println(strD.text());
+            Elements strC = doc.getElementsByClass("s").get(i)
+                    .getElementsByTag("td").get(4).getAllElements();
+            pattern = Pattern.compile(" ");
+            matcher = pattern.matcher(strC.text());
+            String prB = matcher.replaceAll("");
+
+            Elements strY = doc.getElementsByClass("s").get(i)
+                            .getElementsByClass("blue_text").get(0).getAllElements();
+            pattern = Pattern.compile(" ");
+            matcher = pattern.matcher(strY.text());
+            String prY = matcher.replaceAll("");
+
+            Discipline disc = new Discipline();
+            disc = getDisc(strD.text());
+
+            univers.add(
+                    new ClassForUniversities(el.getElementsByClass("light_gray_blue").text(),
+                            doc.getElementsByClass("s").get(i)
+                    .getElementsByClass("light_gray_back gray_border_right").text(),
+                            ss,
+                            disc,
+                            Integer.parseInt(prB),
+                            Integer.parseInt(prY)
+                            ));
+            i++;
+        }
+
+        System.out.print(univers.get(0).getSpeciality());
+    }
+
+    public static Discipline getDisc(String input) {
+
+        Discipline disc = new Discipline();
+        Pattern pattern = Pattern.compile("[ ,.!?]");
+        String[] str = pattern.split(input);
+        for (String s : str) {
+            if (s.equals("обществознание")) {
+                disc.setObsh(true);
+            } else if (s.equals("русский")) {
+                disc.setRus(true);
+            } else if (s.equals("информатика и ИКТ")) {
+                disc.setIkt(true);
+            } else if (s.equals("биология")) {
+                disc.setBio(true);
+            } else if (s.equals("химия")) {
+                disc.setHim(true);
+            } else if (s.equals("физика")) {
+                disc.setFiz(true);
+            } else if (s.equals("литература")) {
+                disc.setLit(true);
+            } else if (s.equals("география")) {
+                disc.setGeo(true);
+            } else if (s.equals("история")) {
+                disc.setIst(true);
+            } else if (s.equals("математика")) {
+                disc.setMat(true);
+            } else if (s.equals("иностранный язык")) {
+                disc.setInyz(true);
+            }
+        }
+        return disc;
     }
 }
