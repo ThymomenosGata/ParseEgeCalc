@@ -35,6 +35,7 @@ public class ParseJsoap {
             int prY = Integer.parseInt(geter(strY.text(), " "));
             Discipline disc = new Discipline();
             disc = getDisc(strD.text());
+            //System.out.println(strD.text());
 
             univers.add(
                     new ClassForUniversities(el.getElementsByClass("light_gray_blue").text(),
@@ -48,13 +49,13 @@ public class ParseJsoap {
             i++;
         }
 
-        System.out.print(univers.get(33).getSpeciality());
+        System.out.print(univers.get(0).getDisp().getIkt());
     }
 
     public static Discipline getDisc(String input) {
 
         Discipline disc = new Discipline();
-        Pattern pattern = Pattern.compile("[ ,.!?]");
+        Pattern pattern = Pattern.compile(", ");
         String[] str = pattern.split(input);
         for (String s : str) {
             if (s.equals("обществознание")) {
