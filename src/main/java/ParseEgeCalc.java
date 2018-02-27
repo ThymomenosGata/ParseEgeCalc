@@ -3,10 +3,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.List;
+
 public class ParseEgeCalc {
-    private static final String URL = "http://egecalc.ru/?rus=100&mat=100&soc=100" +
-            "&phy=100&his=100&bio=100&che=100&lan=100&ict=100&geo=100&lit=100" +
-            "&sort_by=score&city=all&page=1";
+    private static final String URL = "http://egecalc.ru/?rus=100&mat=100" +
+            "&soc=100&phy=100&his=100&bio=100&che=100&lan=100&ict=100&geo=100" +
+            "&lit=100&sort_by=salary&city=all&page=1";
 
     public static void Parser(){
         System.setProperty("webdriver.chrome.driver","/usr/bin/chromedriver");
@@ -23,6 +25,8 @@ public class ParseEgeCalc {
         WebElement element8 = driver.findElement(By.name("ict"));
         WebElement element9 = driver.findElement(By.name("geo"));
         WebElement element10 = driver.findElement(By.name("lit"));
+
+
         element.sendKeys("100");
         element1.sendKeys("100");
         element2.sendKeys("100");
@@ -46,9 +50,11 @@ public class ParseEgeCalc {
         element9.submit();
         element10.submit();
 
-        WebElement el = driver.findElement(By.className("card-block"));
-         
-        System.out.println(el.getText());
+        List<WebElement> el = driver.findElements(By.className("card-block"));
+        List<WebElement> elBM = el.get(0).findElements(By.className("card-digits"));
+        List<WebElement> elDD = el.get(0).findElements(By.className("card-text"));
+        List<WebElement> elUF = el.get(2).findElements(By.tagName("a"));
+        System.out.println(elUF.get(0).getText());
     }
 
 
